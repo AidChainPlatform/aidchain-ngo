@@ -1,207 +1,134 @@
+# AidChain NGO
 
-# 🌍 AidChain NGO Frontend (CHATS-NGO)
+AidChain NGO is the web portal used by NGO operators to manage campaigns, beneficiaries, vendors, market flows, and operational reporting inside the AidChain platform.
 
-A modern **Nuxt 3** web application for NGOs to manage campaigns, onboard beneficiaries and vendors, and interact securely with the AidChain blockchain via the backend API.
+This repository is published as a clean portfolio snapshot. Project provenance is documented in [PROVENANCE.md](./PROVENANCE.md).
 
-This app is part of the **AidChain ecosystem** — a full-stack humanitarian aid distribution platform built with **Hyperledger Besu**, **Node.js**, **RabbitMQ**, and **PostgreSQL**.
+## What This App Does
 
----
+- authenticates NGO users against the AidChain API
+- displays campaign, beneficiary, and vendor management views
+- supports market and cash-for-work workflows
+- surfaces transaction and operational views for NGO teams
+- provides account, support, and settings sections for tenant-level management
 
-## 🚀 Project Overview
+## Platform Position
 
-AidChain empowers NGOs to transparently create, manage, and monitor aid campaigns while ensuring every token-based transaction is verifiable on-chain.
+```text
+AidChain NGO (Nuxt web app)
+          |
+          v
+       AidChain API
+          |
+          v
+   AidChain Blockchain
+```
 
-**Key Objectives**
-- 📦 Manage NGO profiles, campaigns, and beneficiaries  
-- 🧾 Track on-chain disbursements through blockchain integration  
-- 🔐 Ensure secure authentication via JWT tokens  
-- 🌐 Connect seamlessly to AidChain backend (API) and blockchain network  
+## Tech Stack
 
----
+- Nuxt 2
+- Vue 2
+- Vuex
+- Axios
+- Bootstrap / BootstrapVue
+- Element UI
+- Jest
+- ESLint / Prettier
 
-## 🏗️ System Architecture
+## Key Pages and Domains
 
-┌────────────────────────────┐
-│  NGO Frontend (Nuxt 3)     │
-│  Tailwind + Pinia + Axios  │
-└────────────┬───────────────┘
-│ REST API Calls
-┌────────────▼───────────────┐
-│  AidChain Backend (Node.js)│
-│  Express + RabbitMQ + PGSQL│
-└────────────┬───────────────┘
-│ Blockchain Tx
-┌────────────▼───────────────┐
-│  AidChain Blockchain       │
-│  Hyperledger Besu + QBFT   │
-└────────────────────────────┘
+The `pages/` directory includes working areas such as:
 
----
+- `dashboard/`
+- `projects/`
+- `beneficiaries/`
+- `vendors/`
+- `market/`
+- `cash-for-work/`
+- `settings/`
+- `account/`
+- `support/`
+- `sign-up/`
 
-## ⚙️ Tech Stack
+## Repository Layout
 
-| Layer | Technology |
-|-------|-------------|
-| **Frontend Framework** | Nuxt 3 (Vue 3 Composition API) |
-| **UI Library** | Tailwind CSS + Element Plus |
-| **State Management** | Pinia |
-| **API Client** | Axios |
-| **Auth & Storage** | JWT + LocalStorage |
-| **Build Tool** | Vite |
-| **Language** | TypeScript (where supported) |
+```text
+pages/          route-based views
+components/     reusable UI and domain components
+store/          Vuex state management
+middleware/     route guards and auth checks
+plugins/        client plugins
+assets/         styles and bundled assets
+static/         static files
+public/         public assets
+api/            API integration helpers
+utils/          shared utilities
+```
 
----
+## Prerequisites
 
-## 🧩 Directory Overview
+- Node.js 16+ recommended for Nuxt 2 compatibility
+- npm or yarn
 
-chats-ngo/
-├── pages/
-│   ├── admin/
-│   ├── campaigns/
-│   └── auth/
-├── store/
-│   ├── authentication.ts
-│   └── filters.ts
-├── components/
-│   ├── forms/
-│   ├── ui/
-│   └── tables/
-├── composables/
-│   └── useAPI.js
-├── assets/
-│   └── css/
-├── public/
-├── .env.development
-└── nuxt.config.ts
+## Installation
 
----
-
-## 🧱 Environment Setup
-
-### 🔧 Prerequisites
-Ensure you have:
 ```bash
-Node.js >= 18
-npm or yarn
-
-
-⸻
-
-🔑 Environment Variables
-
-Create .env.development at the project root:
-
-# API Base URL for AidChain Backend
-BASE_URL=http://localhost:3000/v1
-
-# Application Port
-NUXT_PORT=3002
-
-# Optional: define API_TIMEOUT, LOG_LEVEL, etc.
-
-
-⸻
-
-🧰 Installation & Run
-
-# 1. Clone repository
-git clone https://github.com/TalhaArjumand/chats-ngo.git
-cd chats-ngo
-
-# 2. Checkout working branch
-git checkout talha
-
-# 3. Install dependencies
 npm install
+```
 
-# 4. Run in development mode
+## Environment Setup
+
+Create a local environment file before running the app.
+
+Example:
+
+```bash
+BASE_URL=http://localhost:3000/v1
+NUXT_PORT=3002
+PAYSTACK_KEY=
+GOOGLE_API=
+RECAPTCHA_SITE_KEY=
+```
+
+The published snapshot excludes runtime `.env` files.
+
+## Development
+
+```bash
 npm run dev
+```
 
-# 5. (Optional) Build for production
-npm run build && npm run start
+## Production Build
 
-App runs at → http://localhost:3002
-
-⸻
-
-🔐 Authentication Flow
-	1.	Login → /auth/login
-	•	Uses backend endpoint /v1/auth/signInNGO
-	•	Receives JWT token
-	•	Stored in LocalStorage via useAuthStore
-	2.	Protected Routes
-	•	Middleware checks token validity before accessing /admin and /campaigns
-	3.	Logout
-	•	Clears token and redirects to login page
-
-⸻
-
-🌉 API Integration Example
-
-All requests are centralized via a composable or Pinia action.
-
-// store/authentication.ts
-import { defineStore } from 'pinia'
-import axios from 'axios'
-
-export const useAuthStore = defineStore('auth', {
-  state: () => ({ token: '' }),
-  actions: {
-    async login(credentials) {
-      const { data } = await axios.post(`${import.meta.env.BASE_URL}/auth/signInNGO`, credentials)
-      this.token = data.token
-      localStorage.setItem('token', this.token)
-    }
-  }
-})
-
-
-⸻
-
-🧠 Developer Workflow
-
-# Create new feature branch
-git checkout -b feature/<branch-name>
-
-# Add and commit
-git add .
-git commit -m "Implement new campaign dashboard"
-
-# Push to remote
-git push origin feature/<branch-name>
-
-
-⸻
-
-💾 Build & Deployment
-
-For production:
-
+```bash
 npm run build
 npm run start
+```
 
-Dockerization (optional):
+## Quality Checks
 
-docker build -t aidchain-ngo .
-docker run -p 3002:3002 aidchain-ngo
+```bash
+npm test
+npm run lint
+npm run lintfix
+```
 
+## Docker
 
-⸻
+The repo includes Docker assets for local or deployment packaging.
 
-🧭 Contribution Guidelines
-	•	Keep consistent naming for components and stores.
-	•	Don’t commit .env or private API URLs.
-	•	Test API integrations locally before merging.
-	•	Use ESLint & Prettier formatting.
-	•	Document all new pages/components.
+```bash
+docker-compose up --build
+```
 
-⸻
+## Integration Notes
 
-💬 Credits
+This app relies on the AidChain API for authentication and all business data. In a full local stack, run it together with:
 
-Developed by Team AidChain
-Mentored under FAST-NUCES Blockchain Systems Lab
+- `AidChainPlatform/aid-api`
+- `AidChainPlatform/aidchain-blockchain`
 
-“Transparency for NGOs begins with verifiable actions.”
-— AidChain NGO Frontend Team
+## Notes
 
+- The frontend reflects a multi-workflow NGO portal rather than a single dashboard screen.
+- The published org repository is a clean snapshot without prior git history.
